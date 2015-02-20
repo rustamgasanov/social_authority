@@ -3,7 +3,6 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'social_authority/version'
 
 Gem::Specification.new do |s|
-  s.add_dependency 'httparty', '>= 0.11.0', '< 0.12.0'
   s.add_development_dependency 'rspec', '~> 3.2'
   s.name        = 'social_authority'
   s.date        = '2015-02-19'

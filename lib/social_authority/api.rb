@@ -9,12 +9,13 @@ module SocialAuthority
     def fetch(user_ids = [], screen_names = [])
       @user_ids, @screen_names = user_ids, screen_names
 
-      response = HTTParty.get(generate_request_url)
+      uri = URI(generate_request_url)
+      response = Net::HTTP.get_response(uri)
 
-      if response.response.code == '200'
-        response.parsed_response['_embedded']
+      if response.code == '200'
+        JSON.parse(response.body)['_embedded']
       else
-        raise ResponseError, response.parsed_response
+        raise ResponseError, response.body
       end
     end
 
