@@ -22,6 +22,7 @@ client.fetch_screen_names(['Porsche', 'Toyota'])
 
 # fetch by user_id(s) AND screen_name(s), note the order of arguments:
 client.fetch(['74594552', '10671602'], ['Porsche', 'Toyota'])
+```
 
 ## Supported Ruby Versions
 This library is tested against the following Ruby versions:
