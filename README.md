@@ -14,18 +14,13 @@ require 'social_authority'
 
 client = SocialAuthority::Client.new('YOUR_ACCESS_ID', 'YOUR_SECRET_KEY')
 
-```
-**Fetch by user_id(s):**
-```ruby
+# fetch by user_id(s):
 client.fetch_user_ids(['74594552', '10671602'])
-```
-**Fetch by screen_name(s):**
-```ruby
+
+# fetch by screen_name(s):
 client.fetch_screen_names(['Porsche', 'Toyota'])
-```
-**Fetch by user_id(s) AND screen_name(s), note the order of arguments:**
-```ruby
+
+#fetch by user_id(s) AND screen_name(s), note the order of arguments:
 client.fetch(['74594552', '10671602'], ['Porsche', 'Toyota'])
-```
 
 
