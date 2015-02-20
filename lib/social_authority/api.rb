@@ -10,7 +10,10 @@ module SocialAuthority
       @user_ids, @screen_names = user_ids, screen_names
 
       uri = URI(generate_request_url)
-      response = Net::HTTP.get_response(uri)
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = uri.scheme == 'https'
+      request = Net::HTTP::Get.new(uri.request_uri)
+      response = http.request(request)
 
       if response.code == '200'
         JSON.parse(response.body)['_embedded']

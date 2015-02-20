@@ -1,6 +1,12 @@
 describe SocialAuthority::Api do
   let(:id) { 'id' }
   let(:key) { 'key' }
+  let(:uri) do
+    double({ host: 'api.followerwonk.com',
+             port: '443',
+             scheme: 'https',
+             request_uri: 'a=a;b=b' })
+  end
 
   it { expect(described_class).to respond_to :new }
   it { expect { described_class.new(id, key) }.to_not raise_error }
@@ -30,8 +36,10 @@ describe SocialAuthority::Api do
       before(:each) do
         @response = double({ code: '200', body: JSON.generate('_embedded'=>'data') })
 
-        allow(URI).to receive(:parse).and_return(@uri = double)
-        allow(Net::HTTP).to receive(:get_response).with(@uri).and_return(@response)
+        allow(URI).to receive(:parse).and_return(uri)
+        allow(Net::HTTP).to receive(:new).and_return(@http = double)
+        allow(@http).to receive(:use_ssl=)
+        allow(@http).to receive(:request).and_return(@response)
         allow(@instance).to receive(:generate_signature).and_return('signature')
         allow(Time).to receive_message_chain(:now, :to_i).and_return(0)
       end
@@ -67,16 +75,22 @@ describe SocialAuthority::Api do
     context 'response handling' do
       it 'should return embedded data if response code was 200' do
         @response = double({ code: '200', body: JSON.generate('_embedded'=>'data') })
-        allow(URI).to receive(:parse).and_return(@uri = double)
-        allow(Net::HTTP).to receive(:get_response).with(@uri).and_return(@response)
+
+        allow(URI).to receive(:parse).and_return(uri)
+        allow(Net::HTTP).to receive(:new).and_return(@http = double)
+        allow(@http).to receive(:use_ssl=)
+        allow(@http).to receive(:request).and_return(@response)
 
         expect(@instance.fetch([], [])).to eql('data')
       end
 
       it "should raise SocialAuthority::ResponseError if response code wasn't 200" do
         @response = double({ code: '401', body: '401 Unauthorized' })
-        allow(URI).to receive(:parse).and_return(@uri = double)
-        allow(Net::HTTP).to receive(:get_response).with(@uri).and_return(@response)
+
+        allow(URI).to receive(:parse).and_return(uri)
+        allow(Net::HTTP).to receive(:new).and_return(@http = double)
+        allow(@http).to receive(:use_ssl=)
+        allow(@http).to receive(:request).and_return(@response)
 
         expect { @instance.fetch([], []) }.to raise_error(SocialAuthority::ResponseError, '401 Unauthorized')
       end
