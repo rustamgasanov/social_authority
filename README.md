@@ -20,7 +20,13 @@ client.fetch_user_ids(['74594552', '10671602'])
 # fetch by screen_name(s):
 client.fetch_screen_names(['Porsche', 'Toyota'])
 
-#fetch by user_id(s) AND screen_name(s), note the order of arguments:
+# fetch by user_id(s) AND screen_name(s), note the order of arguments:
 client.fetch(['74594552', '10671602'], ['Porsche', 'Toyota'])
 
+## Supported Ruby Versions
+This library is tested against the following Ruby versions:
 
+* Ruby 1.9.3
+* Ruby 2.0.0
+* Ruby 2.1
+* Ruby 2.2
